@@ -2,7 +2,9 @@
 title: "Function Practice and Geoms"
 author: "Genee' Glascoe"
 date: "6 April 2020"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 *This notebook is for developing a function and working on geoms*
 
@@ -25,9 +27,12 @@ likert_total <- function(surv.data, scale, num.vec) {
 
 Testing out the function, *likert_total*, that will print out a CSV file which 
 contains the orginal data of the CSV file with the total score added.
+
 ```{r include=FALSE}
 library(here)
+```
 
+```{r}
 activity_surv <- read.csv(here("Data", "Activity Data.csv"))
 
 total_score <- likert_total(activity_surv, 6, c(6, 7, 8))
