@@ -1,0 +1,96 @@
+---
+title: "Function Practice and Geoms"
+author: "Genee' Glascoe"
+date: "6 April 2020"
+output: html_notebook
+---
+*This notebook is for developing a function and working on geoms*
+
+***
+### Question 1
+
+*This function will compute the total score for respondents on a Likert scale*
+
+```{r}
+likert_total <- function(surv.data, scale, num.vec) {
+  reverse.score <- surv.data[,num.vec] <-(scale+1) - surv.data[,num.vec]
+  tot.score.sum <- rowSums(surv.data)
+  surv.data$sum <- tot.score.sum
+  return(surv.data)
+}
+```
+
+***
+### Question 2
+
+Testing out the function, *likert_total*, that will print out a CSV file which 
+contains the orginal data of the CSV file with the total score added.
+```{r include=FALSE}
+library(here)
+
+activity_surv <- read.csv(here("Data", "Activity Data.csv"))
+
+total_score <- likert_total(activity_surv, 6, c(6, 7, 8))
+
+total_score$ID <- activity_surv$ID
+
+total_score_2 <- total_score[c(1:10)]
+
+write.csv(total_score_2, here("Data", "Total Score.csv"))
+
+```
+
+***
+### Question 3
+
+Constructing a single scatterplot showing the relationship of science scores 
+to math scores by gender
+
+```{r include=FALSE}
+library(tidyverse)
+library(here)
+
+hsb2 <- read_csv(here("Data", "hsb2.csv"))
+
+hsb2$female <- factor(hsb2$female,
+                   labels = c("female", "male"),
+                   ordered = TRUE)
+```
+
+```{r} 
+ggplot(data = hsb2) +
+  geom_point(mapping = aes(x = science, y = math, color = female)) +
+  labs(x = "Science Score", y = "Math Score", 
+  title = "Relationship between Science and Math Scores by Gender")
+```
+
+***
+### Question 4
+
+Constructing a seprate scatterplot showing the relationship of science scores 
+to math scores by gender
+
+```{r}
+
+ggplot(data = hsb2) +
+  geom_point(mapping = aes(x = science, y = math)) +
+  labs(x = "Science Score", y = " Math Score", 
+  title = "Relationship between Science and Math Scores by Gender") +
+  facet_grid(~female)
+```
+
+***
+### Question 5
+
+A violin gemo is being utilized to compare the distribution of school types 
+and science scores by displaying their densities.
+
+```{r}
+ggplot(data = hsb2) +
+  geom_violin(mapping = aes(x = schtyp, y = science, fill = schtyp, 
+                            group = schtyp, color=schtyp)) +
+  labs(x = "School Type", y = "Science Score", 
+  title = "Relationship between School Type and Science Scores")
+```
+
+
